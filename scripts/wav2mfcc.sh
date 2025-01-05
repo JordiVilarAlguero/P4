@@ -43,7 +43,7 @@ fi
 
 # Main command for MFCC feature extraction
 sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
-  $MFCC -s $freq_order -l 180 -m $mfcc_order -n $melfilter_order > $base.mfcc || exit 
+  $MFCC -s $freq_order -l 180 -m $mfcc_order -n $melfilter_order > $base.mfcc || exit 1
 
 # Our array files need a header with the number of cols and rows:
 ncol=$((mfcc_order + 1)) # MFCC includes energy term
