@@ -16,7 +16,11 @@ trap cleanup EXIT
 cleanup() {
    \rm -f $base.*
 }
+<<<<<<< HEAD
 
+=======
+#cambiaria esto porque cambia el orden
+>>>>>>> e2b3d4f715413f50c42c558021627e00622fdfbe
 if [[ $# != 3 ]]; then
    echo "$0 lpc_order input.wav output.lp"
    exit 1
@@ -47,7 +51,11 @@ sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WIND
    
 
 # Our array files need a header with the number of cols and rows:
+<<<<<<< HEAD
 ncol=$((lpc_order + 1)) # lpc p =>  (gain a1 a2 ... ap) 
+=======
+ncol=$((lpc_order + 1)) # lpc p =>  (gain a1 a2 ... ap) tambien cambiara en las otras
+>>>>>>> e2b3d4f715413f50c42c558021627e00622fdfbe
 nrow=$(($($X2X +fa < $base.lp | wc -l) / ncol))
 
 # Build fmatrix file by placing nrow and ncol in front, and the data after them

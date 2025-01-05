@@ -120,10 +120,12 @@ for cmd in $*; do
        ## @file
        # \TODO
        # Select (or change) good parameters for gmm_train
+       # \FET 
        for dir in $db_devel/BLOCK*/SES* ; do
            name=${dir/*\/}
            echo $name ----
-           EXEC="gmm_train -v 1 -T 0.0001 -N 20 -m 5 -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$name.gmm $lists/class/$name.train"
+           EXEC="gmm_train -v 1 -i 1 -T 1.e-6 -N 55 -m 80 -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$name.gmm $lists/class/$name.train"
+           #EXEC="gmm_train -v 1 -T 0.0001 -N 20 -m 5 -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$name.gmm $lists/class/$name.train"
            echo $EXEC && $EXEC || exit 1
            echo
        done
@@ -149,7 +151,10 @@ for cmd in $*; do
        # Implement 'trainworld' in order to get a Universal Background Model for speaker verification
        #
        # - The name of the world model will be used by gmm_verify in the 'verify' command below.
-       echo "Implement the trainworld option ..."
+       # \FET trainworld implementado
+       #echo "Implement the trainworld option ..."
+       EXEC="gmm_train -v 1 -i 1 -T 1.e-6 -N 60 -m 60 -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$world.gmm $lists/verif/$world.train"
+       echo $EXEC && $EXEC || exit 1
 
    elif [[ $cmd == verify ]]; then
        ## @file
@@ -160,17 +165,10 @@ for cmd in $*; do
        #   For instance:
        #   * <code> gmm_verify ... > $LOG_VERIF </code>
        #   * <code> gmm_verify ... | tee $LOG_VERIF </code>
-       EXEC="gmm_verify -d $w/FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm $lists/gmm.list $lists/verif/all.test $lists/verif/all.test.candidates"
+       # \FET 
+       EXEC="gmm_verify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT/ -w $world -E gmm lists/gmm.list lists/verif/all.test lists/verif/all.test.candidates"
        echo $EXEC && $EXEC | tee $LOG_VERIF || exit 1
-
-       Usage: gmm_verify [options] list_gmm list_of_test_files list_of_candidates
-
-Options can be:
-  -d dir        Directory of the feature files (def. ".")
-  -e ext        Extension of the feature files (def. "mcp")
-  -D dir        Directory of the gmm files (def. ".")
-  -E ext        Extension of the gmm files (def. "gmm")
-  -w name       Name of the "background" GMM (def. do not use world model)
+                
 
    elif [[ $cmd == verifyerr ]]; then
        if [[ ! -s $LOG_VERIF ]] ; then
@@ -190,7 +188,11 @@ Options can be:
        #
        # El fichero con el resultado del reconocimiento debe llamarse $FINAL_CLASS, que deberá estar en el
        # directorio de la práctica (PAV/P4).
-       echo "To be implemented ..."
+       # \FET 
+       compute_$FEAT $db_test $lists/final/class.test 
+       EXEC="gmm_classify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm $lists/gmm.list $lists/final/class.test" 
+       echo $EXEC && $EXEC | tee $FINAL_CLASS || exit 1
+       #echo "To be implemented ..."
    
    elif [[ $cmd == finalverif ]]; then
        ## @file
@@ -202,14 +204,27 @@ Options can be:
        #
        # El fichero con el resultado de la verificación debe llamarse $FINAL_VERIF, que estará en el
        # directorio de la práctica (PAV/P4).
-       #
+       # \FET finalverif implementado
        # ATENCIÓN:
        # $FINAL_VERIF tiene un formato diferente al proporcionado por 'gmm_verify'. En la salida del
        # programa, que puede guardar en $TEMP_VERIF, la tercera columna es la puntuación dada al
        # candidato para la señal a verificar. En $FINAL_VERIF se pide que la tercera columna sea 1,
        # si se considera al candidato legítimo, o 0, si se considera impostor. Las instrucciones para
        # realizar este cambio de formato están en el enunciado de la práctica.
-       echo "To be implemented ..."
+       
+       #echo "To be implemented ..."
+       if false; then 
+       echo "Ajusta el umbral :)"
+       exit 0
+       fi
+
+       compute_$FEAT $db_test $lists/final/verif.test 
+       EXEC="gmm_verify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm -w $world lists/gmm.list lists/final/verif.test lists/final/verif.test.candidates" #hacemos el verify de los locutores 
+       echo $EXEC && $EXEC | tee $TEMP_VERIF || exit 1
+
+       perl -ane 'print "$F[0]\t$F[1]\t"; 
+        if ($F[2] > -0.847554375439504) {print "1\n"}
+        else {print "0\n"}' $TEMP_VERIF > $FINAL_VERIF
    
    # If the command is not recognize, check if it is the name
    # of a feature and a compute_$FEAT function exists.

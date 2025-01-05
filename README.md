@@ -104,15 +104,18 @@ Este script sirve para sacar características LPC (Linear Predictive Coding) de 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales de predicción lineal
   (LPCC) en su fichero <code>scripts/wav2lpcc.sh</code>:
 
-sox input.wav -t raw -e signed -b 16 - | sptk x2x +sf | sptk frame -l 240 -p 80 | sptk window -l 240 -L 240 |
-sptk lpc -l 240 -m $lpc_order | sptk lpc2c -m $lpc_order > output.lpcc
+<code>
+sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
+  $LPC -l 240 -m $lpc_order | $LPCC -m $lpc_order -M $lpcc_order > $base.lpcc || exit 1
+</code>
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales en escala Mel (MFCC) en su
   fichero <code>scripts/wav2mfcc.sh</code>:
 
-sox input.wav -t raw -e signed -b 16 - | sptk x2x +sf | sptk frame -l 400 -p 160 | sptk window -l 400 -L 400 |
-sptk mfcc -l 400 -m 12 -n 20 -a 0.97 > output.mfcc
-
+<code>
+sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
+    $MFCC -w 1 -s 8 -l 240 -m $mfcc_order -n $mfcc_banks > $base.mfcc || exit 1
+</code>
 
 ### Extracción de características.
 
@@ -122,6 +125,11 @@ sptk mfcc -l 400 -m 12 -n 20 -a 0.97 > output.mfcc
   + Indique **todas** las órdenes necesarias para obtener las gráficas a partir de las señales 
     parametrizadas.
   + ¿Cuál de ellas le parece que contiene más información?
+
+Se observa que los coeficientes 2 y 3 de LP están alineados, indicando una fuerte dependencia lineal entre ellos y una menor cantidad de información. Por el contrario, en LPCC los puntos presentan una distribución mucho más dispersa, lo que sugiere una mayor incorrelación entre los coeficientes y una mayor diversidad en los datos. De manera similar, en MFCC la distribución también es dispersa, pero más uniforme, reflejando una baja correlación y una información más organizada. 
+
+Así, tanto LPCC como MFCC contienen más información que LP debido a la menor redundancia entre sus coeficientes, lo que las convierte en opciones más útiles para análisis donde se busca maximizar la diversidad de las características.
+
 
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
   parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
@@ -133,6 +141,21 @@ sptk mfcc -l 400 -m 12 -n 20 -a 0.97 > output.mfcc
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
   
 - Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
+
+Para **MFCC**:
+- **Ventanas** de 20 a 40 ms.
+- **Frecuencia de muestreo** típica de 8 kHz.
+- Un **banco de filtros Mel** de entre 20 y 40 filtros, para equilibrar la resolución espectral y el coste computacional.
+- Los primeros **13 coeficientes cepstrales** son los más comunes, aunque también pueden considerarse hasta 20 coeficientes, dependiendo de la aplicación.
+- Se aplica la **Transformada Discreta del Coseno (DCT)** para compactar la energía espectral y reducir la redundancia.
+
+Para **LPCC**:
+- Un **orden** de 10 a 16 para el modelo de predicción lineal (LPC).
+- **Frecuencia de muestreo** similar a la de MFCC, alrededor de 8 kHz.
+- **Ventanas** de 20 a 40 ms.
+- Se seleccionan entre **12 y 16 coeficientes cepstrales**.
+- Se aplica **suavizado cepstral** para evitar fluctuaciones abruptas en los coeficientes.
+
 
 ### Entrenamiento y visualización de los GMM.
 
