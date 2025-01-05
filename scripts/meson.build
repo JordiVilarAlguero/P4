@@ -5,11 +5,7 @@ scripts = [
     'plot_gmm_feat.py',
     'spk_verif_score.pl',
     'wav2lp.sh',
-<<<<<<< HEAD
-    'wav2lpcc.sh'
-=======
     'wav2lpcc.sh',
->>>>>>> e2b3d4f715413f50c42c558021627e00622fdfbe
 ]
 
 foreach script: scripts

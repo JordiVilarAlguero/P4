@@ -214,7 +214,7 @@ for cmd in $*; do
        
        #echo "To be implemented ..."
        if false; then 
-       echo "Ajusta el umbral :)"
+       echo 
        exit 0
        fi
 
