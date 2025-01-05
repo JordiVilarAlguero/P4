@@ -33,16 +33,86 @@ ejercicios indicados.
   principal (`sox`, `$X2X`, `$FRAME`, `$WINDOW` y `$LPC`). Explique el significado de cada una de las 
   opciones empleadas y de sus valores.
 
+Este script sirve para sacar características LPC (Linear Predictive Coding) de un archivo de audio en formato WAV. 
+
+#### **Comando `sox`**
+- **Qué hace**: Convierte el archivo WAV en datos sin procesar (`raw`) para que otras herramientas puedan trabajar con ellos.
+- **Opciones**:
+  - `-t raw`: Dice que la salida debe ser en formato crudo.
+  - `-e signed`: Especifica que los datos tienen signo (pueden ser positivos o negativos).
+  - `-b 16`: Cada muestra ocupa 16 bits.
+- **Entrada**: El archivo de audio original.
+- **Salida**: Una versión cruda de los datos del audio.
+
+#### **Comando `$X2X`**
+- **Qué hace**: Cambia el formato de los datos del audio de enteros a números en coma flotante, que son más fáciles de manejar para los cálculos.
+- **Opciones**:
+  - `+sf`: Convierte datos de enteros de 16 bits a números flotantes.
+- **Entrada**: Los datos crudos del audio.
+- **Salida**: Datos en coma flotante.
+
+#### **Comando `$FRAME`**
+- **Qué hace**: Divide el audio en trozos pequeños llamados "tramas", con solapamiento entre ellos para que no se pierda información.
+- **Opciones**:
+  - `-l 240`: Cada trama tiene 240 muestras.
+  - `-p 80`: Las tramas se solapan 80 muestras.
+- **Entrada**: Los datos en coma flotante.
+- **Salida**: Tramas del audio.
+
+#### **Comando `$WINDOW`**
+- **Qué hace**: Aplica una ventana a cada trama para evitar problemas en los bordes al hacer cálculos.
+- **Opciones**:
+  - `-l 240`: Longitud de la ventana.
+  - `-L 240`: Longitud de los datos dentro de la ventana.
+- **Entrada**: Las tramas del audio.
+- **Salida**: Tramas procesadas con una ventana.
+
+#### **Comando `$LPC`**
+- **Qué hace**: Calcula los coeficientes LPC (básicamente, unos números que representan cómo suena el audio).
+- **Opciones**:
+  - `-l 240`: Longitud de la trama.
+  - `-m $lpc_order`: Orden del análisis LPC, que se define al principio del script.
+- **Entrada**: Las tramas con ventana.
+- **Salida**: Archivo con los coeficientes LPC de cada trama.
+
+
+
 - Explique el procedimiento seguido para obtener un fichero de formato *fmatrix* a partir de los ficheros de
   salida de SPTK (líneas 49 a 55 del script `wav2lp.sh`).
 
+
+  El formato `fmatrix` tiene un encabezado con el número de filas (`nrow`) y columnas (`ncol`), seguido de los datos LPC. 
+
+1. **Cálculo de las dimensiones**:
+   - `ncol`: Es el orden LPC más uno (porque también incluye el coeficiente de ganancia).
+   - `nrow`: Se obtiene dividiendo el total de valores LPC entre el número de columnas (`ncol`).
+
+2. **Escritura del encabezado**:
+   - Primero se escriben `nrow` y `ncol` en el archivo usando `$X2X +aI`.
+
+3. **Añadir los datos**:
+   - Luego se mete todo el contenido del archivo temporal `$base.lp` al final.
+
+
+
   * ¿Por qué es más conveniente el formato *fmatrix* que el SPTK?
+
+- **Más organizado**: El formato `fmatrix` tiene un encabezado que dice cuántas filas y columnas hay, así que no necesitas calcularlo después.
+- **Más compatible**: Es más fácil de usar en otros programas y herramientas.
+- **Más práctico**: Todo está bien ordenado y listo para usar, sin tener que hacer más cálculos ni conversiones.
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales de predicción lineal
   (LPCC) en su fichero <code>scripts/wav2lpcc.sh</code>:
 
+sox input.wav -t raw -e signed -b 16 - | sptk x2x +sf | sptk frame -l 240 -p 80 | sptk window -l 240 -L 240 |
+sptk lpc -l 240 -m $lpc_order | sptk lpc2c -m $lpc_order > output.lpcc
+
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales en escala Mel (MFCC) en su
   fichero <code>scripts/wav2mfcc.sh</code>:
+
+sox input.wav -t raw -e signed -b 16 - | sptk x2x +sf | sptk frame -l 400 -p 160 | sptk window -l 400 -L 400 |
+sptk mfcc -l 400 -m 12 -n 20 -a 0.97 > output.mfcc
+
 
 ### Extracción de características.
 
