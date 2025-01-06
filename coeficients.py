@@ -11,7 +11,8 @@ def plot_coefficients(file_path, title):
     
  
     plt.figure()
-    plt.scatter(x, y, marker='o', color='purple')
+    plt.grid(True)
+    plt.scatter(x, y, marker='o', color='tab:olive')
     plt.xlabel('x')
     plt.ylabel('y')
     plt.title(title)

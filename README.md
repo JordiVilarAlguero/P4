@@ -122,8 +122,14 @@ sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WIND
 - Inserte una imagen mostrando la dependencia entre los coeficientes 2 y 3 de las tres parametrizaciones
   para todas las señales de un locutor.
   
+
   + Indique **todas** las órdenes necesarias para obtener las gráficas a partir de las señales 
     parametrizadas.
+    Despues se manda a llamar nuestro codigo <code>coeficients.py<code> desde linea de comandos para poder visualizar las graficas.
+    ![alt text](IMG/img1.png)
+    ![alt text](IMG/img2.png)
+    ![alt text](IMG/img3.png)
+
   + ¿Cuál de ellas le parece que contiene más información?
 
 Se observa que los coeficientes 2 y 3 de LP están alineados, indicando una fuerte dependencia lineal entre ellos y una menor cantidad de información. Por el contrario, en LPCC los puntos presentan una distribución mucho más dispersa, lo que sugiere una mayor incorrelación entre los coeficientes y una mayor diversidad en los datos. De manera similar, en MFCC la distribución también es dispersa, pero más uniforme, reflejando una baja correlación y una información más organizada. 
