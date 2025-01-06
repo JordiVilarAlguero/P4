@@ -135,7 +135,7 @@ sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WIND
     fmatrix_show work/mfcc/BLOCK00/SES000/*.mfcc | egrep '^\[' | cut -f4,5 > mfcc.txt
 
 
-    Despues se manda a llamar nuestro codigo <code>coeficients.py<code> desde linea de comandos para poder visualizar las graficas.
+  Despues se manda a llamar nuestro codigo <code>coeficients.py<code> desde linea de comandos para poder visualizar las graficas.
     ![alt text](IMG/img1.png)
     ![alt text](IMG/img2.png)
     ![alt text](IMG/img3.png)
