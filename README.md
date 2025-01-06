@@ -135,7 +135,7 @@ sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WIND
     fmatrix_show work/mfcc/BLOCK00/SES000/*.mfcc | egrep '^\[' | cut -f4,5 > mfcc.txt
 
 
-  Despues se manda a llamar nuestro codigo <code>coeficients.py<code> desde linea de comandos para poder visualizar las graficas.
+  Despues se manda a llamar nuestro codigo <code>coeficients.py</code> desde linea de comandos para poder visualizar las graficas.
     ![alt text](IMG/img1.png)
     ![alt text](IMG/img2.png)
     ![alt text](IMG/img3.png)
@@ -191,9 +191,20 @@ Complete el código necesario para entrenar modelos GMM.
 - Inserte una gráfica que muestre la función de densidad de probabilidad modelada por el GMM de un locutor
   para sus dos primeros coeficientes de MFCC.
 
+  [alt text](IMG/img4.png)
+
 - Inserte una gráfica que permita comparar los modelos y poblaciones de dos locutores distintos (la gŕafica
   de la página 20 del enunciado puede servirle de referencia del resultado deseado). Analice la capacidad
   del modelado GMM para diferenciar las señales de uno y otro.
+  
+  Indicamos los siguientes comandos desde la linea de comandos para poder visualizar los plots:
+
+    plot_gmm_feat -g green -f green work/gmm/mfcc/SES008.gmm work/mfcc/BLOCK00/SES008/SA008S* &
+    plot_gmm_feat -g green -f magenta work/gmm/mfcc/SES008.gmm work/mfcc/BLOCK08/SES088/SA088S* &
+    plot_gmm_feat -g magenta -f magenta work/gmm/mfcc/SES088.gmm work/mfcc/BLOCK08/SES088/SA088S* &
+    plot_gmm_feat -g magenta -f green work/gmm/mfcc/SES088.gmm work/mfcc/BLOCK00/SES008/SA008S* &
+
+    [alt text](IMG/img5.png)
 
 ### Reconocimiento del locutor.
 
