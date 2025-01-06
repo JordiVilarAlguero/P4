@@ -124,6 +124,16 @@ sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WIND
   
   + Indique **todas** las órdenes necesarias para obtener las gráficas a partir de las señales 
     parametrizadas.
+
+    Creamos los documentos de texto con los valores para cada parametrización:
+
+    fmatrix_show work/lp/BLOCK00/SES000/*.lp | egrep '^\[' | cut -f4,5 > lp.txt
+
+    fmatrix_show work/lpcc/BLOCK00/SES000/*.lpcc | egrep '^\[' | cut -f4,5 > lpcc.txt
+
+    fmatrix_show work/mfcc/BLOCK00/SES000/*.mfcc | egrep '^\[' | cut -f4,5 > mfcc.txt
+
+
   + ¿Cuál de ellas le parece que contiene más información?
 
 Se observa que los coeficientes 2 y 3 de LP están alineados, indicando una fuerte dependencia lineal entre ellos y una menor cantidad de información. Por el contrario, en LPCC los puntos presentan una distribución mucho más dispersa, lo que sugiere una mayor incorrelación entre los coeficientes y una mayor diversidad en los datos. De manera similar, en MFCC la distribución también es dispersa, pero más uniforme, reflejando una baja correlación y una información más organizada. 
@@ -142,6 +152,12 @@ Así, tanto LPCC como MFCC contienen más información que LP debido a la menor 
   | &rho;<sub>x</sub>[2,3] |-0.8183|0.2177|0.04137|
   
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
+
+  Se puede confirmar lo que hemos observado en las gráficas:
+
+- **LPCC y MFCC**: Los valores están más cerca de 0, indicando menor correlación, por lo tanto un gráfico disperso y mayor cantidad de información.  
+- **LP**: El valor es más próximo a 1, lo que sugiere una correlación más alta y por lo tanto una dependencia que se observaba como una distribución en forma de recta.
+
   
 - Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
 
