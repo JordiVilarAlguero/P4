@@ -125,19 +125,21 @@ sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WIND
 
   + Indique **todas** las órdenes necesarias para obtener las gráficas a partir de las señales 
     parametrizadas.
-    Despues se manda a llamar nuestro codigo <code>coeficients.py<code> desde linea de comandos para poder visualizar las graficas.
-    ![alt text](IMG/img1.png)
-    ![alt text](IMG/img2.png)
-    ![alt text](IMG/img3.png)
 
-
-    Creamos los documentos de texto con los valores para cada parametrización:
+ Creamos los documentos de texto con los valores para cada parametrización:
 
     fmatrix_show work/lp/BLOCK00/SES000/*.lp | egrep '^\[' | cut -f4,5 > lp.txt
 
     fmatrix_show work/lpcc/BLOCK00/SES000/*.lpcc | egrep '^\[' | cut -f4,5 > lpcc.txt
 
     fmatrix_show work/mfcc/BLOCK00/SES000/*.mfcc | egrep '^\[' | cut -f4,5 > mfcc.txt
+
+
+    Despues se manda a llamar nuestro codigo <code>coeficients.py<code> desde linea de comandos para poder visualizar las graficas.
+    ![alt text](IMG/img1.png)
+    ![alt text](IMG/img2.png)
+    ![alt text](IMG/img3.png)
+
 
 
   + ¿Cuál de ellas le parece que contiene más información?
