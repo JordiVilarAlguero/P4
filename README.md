@@ -122,8 +122,14 @@ sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WIND
 - Inserte una imagen mostrando la dependencia entre los coeficientes 2 y 3 de las tres parametrizaciones
   para todas las señales de un locutor.
   
+
   + Indique **todas** las órdenes necesarias para obtener las gráficas a partir de las señales 
     parametrizadas.
+    Despues se manda a llamar nuestro codigo <code>coeficients.py<code> desde linea de comandos para poder visualizar las graficas.
+    ![alt text](IMG/img1.png)
+    ![alt text](IMG/img2.png)
+    ![alt text](IMG/img3.png)
+
 
     Creamos los documentos de texto con los valores para cada parametrización:
 
