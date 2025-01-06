@@ -34,12 +34,12 @@ int classify(const vector<GMM> &vgmm, const fmatrix &dat, float &maxlprob)
 		}
 	}
 
-	for (unsigned int ind = 0; ind < vgmm.size(); ind++){
+	/* for (unsigned int ind = 0; ind < vgmm.size(); ind++){
 		if((lprob = vgmm[ind].logprob(dat))> maxlprob){
 			maxlprob = lprob;
 			maxind =ind;
 		}
-	}
+	}*/
 	{
 		/* code */
 	}
