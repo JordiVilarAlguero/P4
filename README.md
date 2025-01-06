@@ -206,6 +206,9 @@ Complete el código necesario para entrenar modelos GMM.
 
     ![alt text](IMG/img5.png)
 
+
+    La gráfica muestra que las regiones predichas por los GMM de los locutores se solapan bastante, sobre todo en las zonas exteriores (90%). En cambio, las áreas internas (50%) son más distintas, lo que indica que los GMM diferencian mejor las partes centrales de las señales. Aun así, el solapamiento en general hace más difícil distinguir completamente entre los locutores.
+
 ### Reconocimiento del locutor.
 
 Complete el código necesario para realizar reconociminto del locutor y optimice sus parámetros.
@@ -215,7 +218,7 @@ Complete el código necesario para realizar reconociminto del locutor y optimice
 
   ![alt text](classerr.png)
 
-  
+
 
 ### Verificación del locutor.
 
