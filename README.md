@@ -134,9 +134,12 @@ Así, tanto LPCC como MFCC contienen más información que LP debido a la menor 
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
   parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
 
+  ![alt text](pearson.png)
+
+
   |                        | LP   | LPCC | MFCC |
   |------------------------|:----:|:----:|:----:|
-  | &rho;<sub>x</sub>[2,3] |      |      |      |
+  | &rho;<sub>x</sub>[2,3] |-0.8183|0.2177|0.04137|
   
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
   
